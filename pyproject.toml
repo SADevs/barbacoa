@@ -1,0 +1,11 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "barbacoa"
+author = "Daniel Wallace"
+author-email = "daniel@gtmanfred.com"
+home-page = "https://github.com/SADevs/barbacoa"
+classifiers = ["License :: OSI Approved :: Apache Software License"]
+
