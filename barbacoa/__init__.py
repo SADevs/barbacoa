@@ -11,7 +11,7 @@ GIT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '.git'
 
 
 def version(v):
-    return tuple(map(int, (v.split("."))))
+    return tuple(map(int, [num for num in v.replace('-', '.').split('.') if num.isdigit()]))
 
 
 def get_version_data():
@@ -21,6 +21,7 @@ def get_version_data():
 
 
 def write_version_data(version_data):
+    version_data['version'] = '.'.join(map(str, version(version_data['version'])))
     with open(VERSION_FILE, 'w') as vfile:
         json.dump(version_data, vfile)
 
