@@ -20,7 +20,7 @@ class Hub(object):
         self._add_subsystem('tools', pypath='barbacoa.hub.mods.tools')
 
     def _add_subsystem(self, modname, subname=None, pypath=None, virtual=True, recurse=False, mod_basename='hub.pack'):
-        subname = subname if subname else modname
+        subname = subname or modname
         self._subs[modname] = Pack(self, modname, subname, pypath, virtual, recurse)
 
     def _remove_subsystem(self, subname):
@@ -58,7 +58,7 @@ class Pack(object):
                  recurse=False, mod_basename='hub.pack'):
         self._parent = parent
         self._modname = modname
-        self._subname = subname if subname else modname
+        self._subname = subname or modname
         self._pypath = pypath
         self._virtual = virtual
         self._recurse = recurse
