@@ -5,6 +5,9 @@ Asynchronous task manager using asyncio
 import json
 import os
 import subprocess
+import sys
+
+import barbacoa.plugins.struct
 
 VERSION_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'version.json')
 GIT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '.git')
@@ -42,3 +45,10 @@ else:
     write_version_data(version_data)
 
 __version__ = version_data['version']
+
+# setup hub
+hub = barbacoa.plugins.struct.Hub()
+hub.tools.pack.add('backends')
+hub.tools.pack.add('storage')
+hub.tools.pack.add('queues')
+hub.tools.pack.add('tasks')

@@ -21,6 +21,6 @@ def dir_list(pypath=None):
             ret.append(os.path.dirname(mod.__file__))
         except ImportError:
             if HAS_PKGRESOURCES:
-                for entry in pkg_resources.iter_entry_points('hub.loader', path):
+                for entry in pkg_resources.iter_entry_points('barbacoa.loader', path):
                     ret.append(os.path.dirname(entry.load().__file__))
     return ret

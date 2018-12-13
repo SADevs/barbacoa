@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-import barbacoa.hub.struct
+import barbacoa
 
 
 @pytest.fixture
 def hub():
-    return barbacoa.hub.struct.Hub()
+    return barbacoa.hub
