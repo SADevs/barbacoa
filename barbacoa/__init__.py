@@ -6,7 +6,8 @@ try:
     import setuptools_scm
     __version__ = setuptools_scm.get_version()
 except ImportError:
-    __version__ = '0.0.0'
+    # This is only set for packaging
+    __version__ = None
 
 import barbacoa.plugins.struct
 
