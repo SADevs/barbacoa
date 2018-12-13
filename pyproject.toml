@@ -28,6 +28,11 @@ test = [
     "pytest",
     "pytest-cov",
 ]
+[tool.flit.entrypoints."barbacoa.loader"]
+backends = "barbacoa.backends"
+storage = "barbacoa.storage"
+queues = "barbacoa.queues"
+tasks = "barbacoa.tasks"
 
 [tool.tox]
 legacy_tox_ini = """

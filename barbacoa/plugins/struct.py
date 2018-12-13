@@ -5,11 +5,11 @@ import collections
 import inspect
 import os
 
-# Import Hub Libs
-import barbacoa.hub.dirs
-import barbacoa.hub.exc
-import barbacoa.hub.loader
-import barbacoa.hub.scanner
+# Import Plugins Libs
+import barbacoa.plugins.dirs
+import barbacoa.plugins.exc
+import barbacoa.plugins.loader
+import barbacoa.plugins.scanner
 
 
 class Hub(object):
@@ -17,7 +17,7 @@ class Hub(object):
 
     def __init__(self):
         self._subs = collections.OrderedDict()
-        self._add_subsystem('tools', pypath='barbacoa.hub.mods.tools')
+        self._add_subsystem('tools', pypath='barbacoa.plugins.mods.tools')
 
     def _add_subsystem(self, modname, subname=None, pypath=None, virtual=True, recurse=False, mod_basename='hub.pack'):
         subname = subname or modname
@@ -50,7 +50,7 @@ class Hub(object):
         for sub in self._subs:
             if dirname in self._subs[sub]._dirs:
                 return self._subs[sub]
-        raise barbacoa.hub.exc.PackLookupError('Called from outside a hub!')
+        raise barbacoa.plugins.exc.PackLookupError('Called from outside a hub!')
 
 
 class Pack(object):
@@ -70,8 +70,8 @@ class Pack(object):
         self.__prepare__()
 
     def __prepare__(self):
-        self._dirs = barbacoa.hub.dirs.dir_list(self._pypath or self._subname)
-        self._scan = barbacoa.hub.scanner.scan(self._dirs, self._recurse)
+        self._dirs = barbacoa.plugins.dirs.dir_list(self._pypath or self._subname)
+        self._scan = barbacoa.plugins.scanner.scan(self._dirs, self._recurse)
 
     @property
     def __name__(self):
@@ -107,7 +107,7 @@ class Pack(object):
     def __contains__(self, item):
         try:
             return hasattr(self, item)
-        except barbacoa.hub.exc.PackLookupError:
+        except barbacoa.plugins.exc.PackLookupError:
             return False
 
     def _apply_wrapper(self, mod):
@@ -131,14 +131,14 @@ class Pack(object):
         # Let's see if the module being lookup is in the load errors dictionary
         if item in self._load_errors:
             # Return the LoadError
-            raise barbacoa.hub.exc.PackLoadError(self._load_errors[item])
+            raise barbacoa.plugins.exc.PackLoadError(self._load_errors[item])
 
     def _load_item(self, bname):
-        mname = '.'.join(self.__name__, os.path.basename(bname).split(".")[0])
+        mname = '.'.join([self.__name__, os.path.basename(bname).split(".")[0]])
         if bname not in self._scan:
             raise Exception('Bad call to load item: {mname}')
-        mod = barbacoa.hub.loader.load_mod(mname, self._scan[bname]['path'])
-        vret = barbacoa.hub.loader.load_virtual(self._parent, self._virtual, mod, bname)
+        mod = barbacoa.plugins.loader.load_mod(mname, self._scan[bname]['path'])
+        vret = barbacoa.plugins.loader.load_virtual(self._parent, self._virtual, mod, bname)
         if 'error' in vret:
             self._load_errors[vret['name']] = vret['error']
             return
