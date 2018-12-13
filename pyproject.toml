@@ -7,5 +7,75 @@ module = "barbacoa"
 author = "Daniel Wallace"
 author-email = "daniel@gtmanfred.com"
 home-page = "https://github.com/SADevs/barbacoa"
-classifiers = ["License :: OSI Approved :: Apache Software License"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Clustering",
+    "Topic :: System :: Distributed Computing"
+]
 
+[tool.flit.metadata.requires-extra]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist =
+    py35
+    py36
+    py37
+    coverage
+    flake8
+skip_missing_interpreters = true
+isolated_build = True
+
+[testenv]
+passenv = TOXENV CI TRAVIS TRAVIS_* CODECOV_*
+commands = pytest --cov=barbacoa/ --cov-config=pytest.ini --cov-report= {posargs}
+changedir = {toxinidir}
+setenv = COVERAGE_FILE = {toxworkdir}/.coverage.{envname}
+extras = test
+
+[testenv:flake8]
+skip_install = True
+basepython = python3
+deps = flake8
+commands = flake8 tests/ pepper/ scripts/pepper setup.py
+
+[testenv:coverage]
+skip_install = True
+deps = coverage >= 4.4.1, < 5
+setenv = COVERAGE_FILE={toxworkdir}/.coverage
+changedir = {toxinidir}
+commands =
+    coverage erase
+    coverage combine
+    coverage report -m
+    coverage html
+    coverage xml -o {toxworkdir}/coverage.xml
+
+[testenv:codecov]
+deps = codecov
+skip_install = True
+changedir = {toxinidir}
+commands = codecov --file "{toxworkdir}/coverage.xml"
+
+[testenv:http]
+skip_install = True
+basepython = python36
+deps =
+changedir = {toxinidir}/htmlcov
+commands = python -m http.server
+"""

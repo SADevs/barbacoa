@@ -1,0 +1,31 @@
+sudo: false
+services:
+- docker
+language: python
+cache: pip
+services:
+- docker
+
+before_install:
+- pyenv versions
+
+install:
+- pip install tox
+
+matrix:
+  include:
+  - env: TOXENV=35,coverage CODECOV=py
+    python: 3.5
+  - env: TOXENV=36,coverage CODECOV=py
+    python: 3.6
+  - env: TOXENV=37,coverage CODECOV=py
+    python: 3.7-dev
+  - env: TOXENV=flake8
+    python: 3.6
+
+script:
+- docker run -v $PWD:/barbacoa -ti --rm gtmanfred/barbacoa:latest tox -e "${CODECOV}${TOXENV}"
+
+after_success:
+- sudo chown $USER .tox/
+- if [[ $CODECOV == "py" ]]; then tox -e codecov; fi

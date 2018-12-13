@@ -134,7 +134,7 @@ class Pack(object):
             raise barbacoa.hub.exc.PackLoadError(self._load_errors[item])
 
     def _load_item(self, bname):
-        mname = f'{self.__name__}.{os.path.basename(bname).split(".")[0]}'
+        mname = '.'.join(self.__name__, os.path.basename(bname).split(".")[0])
         if bname not in self._scan:
             raise Exception('Bad call to load item: {mname}')
         mod = barbacoa.hub.loader.load_mod(mname, self._scan[bname]['path'])
