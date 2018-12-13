@@ -1,5 +1,5 @@
 [build-system]
-requires = ["flit"]
+requires = ["flit", "setuptools_scm"]
 build-backend = "flit.buildapi"
 
 [tool.flit.metadata]
@@ -29,7 +29,6 @@ test = [
     "pytest",
     "pytest-cov",
 ]
-dev = ["setuptools_scm"]
 [tool.flit.entrypoints."barbacoa.loader"]
 backends = "barbacoa.backends"
 storage = "barbacoa.storage"
