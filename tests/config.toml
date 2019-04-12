@@ -1,0 +1,17 @@
+[barbacoa]
+queue = "tests"
+storage = "tests"
+timeout = 60
+max_tasks = 8
+
+[barbacoa.tasks."test.custom_ping"]
+queue = "custom"
+
+[barbacoa.queues.tests]
+queue = "sqlite:///tests/tests.sqlite"
+storage = "sqlite:///tests/tests.sqlite"
+
+[barbacoa.queues.custom]
+queue = "sqlite:///tests/custom.sqlite"
+storage = "sqlite:///tests/custom.sqlite"
+timeout = 120
